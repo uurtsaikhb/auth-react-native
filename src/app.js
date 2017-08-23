@@ -8,7 +8,8 @@ import LoginForm from './components/LoginForm';
 class App extends Component {
 
     state = {
-        loggedIn: null
+        loggedIn: null,
+        user: null
     };
 
     componentWillMount() {
@@ -25,7 +26,7 @@ class App extends Component {
         // listener for user status change
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ loggedIn: true });
+                this.setState({ loggedIn: true, user: user });
             } else {
                 this.setState({ loggedIn: false });
             }
@@ -36,9 +37,11 @@ class App extends Component {
         switch (this.state.loggedIn) {
             case true:
                 return (
-                    <Button onPress={() => firebase.auth().signOut()}>
-                        Log Out
-                    </Button>
+                    <View  style = { styles.logoutButtonViewStyle }>
+                        <Button onPress={() => firebase.auth().signOut()}>
+                            Log Out
+                        </Button>
+                    </View>
                 );
             case false:
                 return <LoginForm />;
@@ -46,7 +49,7 @@ class App extends Component {
                 return <Spinner size = { 'large' }/>
         }
     }
-    
+
     render() {
         return (
             <View>
@@ -58,8 +61,9 @@ class App extends Component {
 }
 
 const styles = {
-    rootViewStyle: {
-        flex: 1
+    logoutButtonViewStyle: {
+        padding: 5,
+        flexDirection: 'row',
     }
 };
 
